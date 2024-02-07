@@ -41,6 +41,7 @@ def logging(func: Callable) -> Callable:
     декорируемой функции
     :param func: Callable :return: Callable
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         """ Функция обертка """
@@ -55,14 +56,43 @@ def logging(func: Callable) -> Callable:
     return wrapper
 
 
+def counter(func: Callable) -> Callable:
+    """
+    Декоратор. Осуществляет подсчет количества запуска функций.
+    :param func: Callable :return: Callable
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        """ Функция обертка """
+        wrapper.count += 1
+        print(f'Количество вызовов функции {func.__name__}: {wrapper.count}')
+        return func(*args, **kwargs)
+
+    wrapper.count = 0
+    return wrapper
+
+
 if __name__ == '__main__':
+    @counter
     @logging
     @code_slowdown
     @how_are_you
     def test():
         """ Функция для тестирования декораторов """
-        # print('<Тут что-то происходит...>')
-        print(12/0)
+        print('<Тут что-то происходит...>')
+        # print(12 / 3)
+
+    @counter
+    @logging
+    @code_slowdown
+    def say_hello(name: str):
+        """ Функция для приветствия пользователя """
+        print('Hello', name)
 
 
     test()
+    test(123)
+    test()
+
+    say_hello('Аня')
+    say_hello('Антон')
