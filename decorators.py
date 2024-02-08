@@ -61,6 +61,7 @@ def counter(func: Callable) -> Callable:
     Декоратор. Осуществляет подсчет количества запуска функций.
     :param func: Callable :return: Callable
     """
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         """ Функция обертка """
@@ -69,6 +70,26 @@ def counter(func: Callable) -> Callable:
         return func(*args, **kwargs)
 
     wrapper.count = 0
+    return wrapper
+
+
+def cashing(func: Callable) -> Callable:
+    """
+    Декоратор. Выполняет функции кеширования результатов полученных при вызове декорируемой функции
+    :param func: Callable :return: Callable
+    """
+    cache = {}
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        """ Функция обертка """
+        key = args + tuple(kwargs.items())
+        result = cache.get(key)
+        if result is None:
+            result = func(*args, **kwargs)
+            cache[key] = result
+        return result
+
     return wrapper
 
 
@@ -82,6 +103,7 @@ if __name__ == '__main__':
         print('<Тут что-то происходит...>')
         # print(12 / 3)
 
+
     @counter
     @logging
     @code_slowdown
@@ -90,9 +112,25 @@ if __name__ == '__main__':
         print('Hello', name)
 
 
-    test()
-    test(123)
-    test()
+    @cashing
+    @counter
+    def fibonacci(number: int):
+        """ Функция для вычисления числа Фибоначчи с использованием рекурсии """
+        if number <= 2:
+            return 1
+        return fibonacci(number - 2) + fibonacci(number - 1)
 
-    say_hello('Аня')
-    say_hello('Антон')
+
+    print(fibonacci(5))
+    print(fibonacci(7))
+    print(fibonacci(7))
+    print(fibonacci(15))
+    print(fibonacci(30))
+    print(fibonacci(10))
+
+    # test()
+    # test(123)
+    # test()
+    #
+    # say_hello('Аня')
+    # say_hello('Антон')

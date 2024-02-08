@@ -11,5 +11,16 @@ def test():
     print(1 / 0)
 
 
-test()
-test()
+@decorators.cashing
+@decorators.counter
+def fibonacci(number: int):
+    if number <= 2:
+        return 1
+    return fibonacci(number - 2) + fibonacci(number - 1)
+
+
+# test()
+# test()
+
+print(fibonacci(10))
+print(fibonacci(11))
