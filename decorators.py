@@ -53,16 +53,3 @@ def logging(func: Callable) -> Callable:
                            f" {func.__name__} произошла ошибка - {error}")
 
     return wrapper
-
-
-if __name__ == '__main__':
-    @logging
-    @code_slowdown
-    @how_are_you
-    def test():
-        """ Функция для тестирования декораторов """
-        # print('<Тут что-то происходит...>')
-        print(12/0)
-
-
-    test()

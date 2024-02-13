@@ -1,13 +1,12 @@
-import decorators
+from decorators import how_are_you, code_slowdown, logging
 
 
-@decorators.logging
-@decorators.code_slowdown
-@decorators.how_are_you
-def test():
-    """ Функция для тестирования декораторов """
-    print('<Тут что-то происходит...>')
-    print(1/0)
+if __name__ == '__main__':
 
-
-test()
+    @logging
+    @code_slowdown
+    @how_are_you
+    def test():
+        """ Функция для тестирования декораторов """
+        print('<Тут что-то происходит...>')
+        return 1/0
