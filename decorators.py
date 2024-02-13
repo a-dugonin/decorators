@@ -14,12 +14,3 @@ def how_are_you(func: Callable) -> Callable:
         return func(*args, **kwargs)
 
     return wrapper
-
-
-if __name__ == '__main__':
-    @how_are_you
-    def test():
-        print('<Тут что-то происходит...>')
-
-
-    test()
